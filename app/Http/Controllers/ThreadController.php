@@ -66,6 +66,9 @@ class ThreadController extends Controller
     {
         $thread->load([
             'user',
+            'comments' => function ($query) {
+                $query->withCount('upvotes');
+            },
             'comments.user',
         ]);
 

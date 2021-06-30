@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/threads/create', [ThreadController::class, 'create'])->name('threads.create');
     Route::post('/threads', [ThreadController::class, 'store'])->name('threads.store');
     Route::post('/threads/{thread}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/comments/{comment}', [CommentController::class, 'upvote'])->name('comments.upvote');
 });
 
 Route::get('/threads/{thread}', [ThreadController::class, 'show'])->name('threads.show');

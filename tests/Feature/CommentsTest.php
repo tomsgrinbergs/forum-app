@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Comment;
 use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,6 +35,28 @@ class CommentsTest extends TestCase
     public function test_a_guest_user_cannot_add_a_comment_to_a_thread()
     {
         $response = $this->post(route('comments.store', 1));
+        $response->assertRedirect('login');
+    }
+
+    public function test_an_authenticated_user_can_upvote_a_comment()
+    {
+        $user = User::factory()->create();
+        $comment = Comment::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('comments.upvote', $comment));
+
+        $response->assertRedirect(route('threads.show', $comment->thread));
+        $response->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('comment_upvotes', [
+            'comment_id' => $comment->id,
+            'user_id' => $user->id,
+        ]);
+    }
+
+    public function test_a_guest_user_cannot_upvote_a_comment()
+    {
+        $response = $this->post(route('comments.upvote', 1));
         $response->assertRedirect('login');
     }
 }

@@ -36,6 +36,15 @@
                             <p class="whitespace-pre-wrap">{{ $comment->content }}</p>
                             <div>by {{ $comment->user->name }}</div>
                         </div>
+                        <div class="flex justify-between items-center text-right border-t mt-4 pt-4">
+                            <div>Upvotes: {{ $comment->upvotes_count }}</div>
+                            @auth
+                                <form method="POST" action="{{ route('comments.upvote', $comment) }}">
+                                    @csrf
+                                    <x-button>Upvote</x-button>
+                                </form>
+                            @endauth
+                        </div>
                     </div>
                 </div>
             </div>

@@ -93,4 +93,13 @@ class CommentController extends Controller
     {
         //
     }
+
+    public function upvote(Comment $comment)
+    {
+        $comment->upvotes()->create([
+            'user_id' => Auth::id(),
+        ]);
+
+        return redirect()->route('threads.show', $comment->thread);
+    }
 }
