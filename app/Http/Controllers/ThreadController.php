@@ -64,7 +64,9 @@ class ThreadController extends Controller
      */
     public function show(Thread $thread)
     {
-        //
+        return view('threads.show', [
+            'thread' => $thread,
+        ]);
     }
 
     /**
