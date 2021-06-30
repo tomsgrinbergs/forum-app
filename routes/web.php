@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('dashboard');
-})->name('dashboard');
+    return view('threads.index');
+})->name('threads.index');
 
 require __DIR__.'/auth.php';
