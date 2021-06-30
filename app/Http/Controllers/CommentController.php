@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ThreadController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,14 +16,7 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        $threads = Thread::query()
-            ->with('user')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('threads.index', [
-            'threads' => $threads,
-        ]);
+        //
     }
 
     /**
@@ -32,7 +26,7 @@ class ThreadController extends Controller
      */
     public function create()
     {
-        return view('threads.create');
+        //
     }
 
     /**
@@ -41,46 +35,38 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Thread $thread)
     {
         $request->validate([
-            'title' => ['required', 'max:255'],
-            'content' => ['required'],
+            'comment' => ['required'],
         ]);
 
-        Auth::user()->threads()->create([
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
+        $thread->comments()->create([
+            'user_id' => Auth::id(),
+            'content' => $request->input('comment'),
         ]);
 
-        return redirect()->route('threads.index');
+        return redirect()->route('threads.show', $thread);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Thread  $thread
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show(Comment $comment)
     {
-        $thread->load([
-            'user',
-            'comments.user',
-        ]);
-
-        return view('threads.show', [
-            'thread' => $thread,
-        ]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Thread  $thread
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Thread $thread)
+    public function edit(Comment $comment)
     {
         //
     }
@@ -89,10 +75,10 @@ class ThreadController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Thread  $thread
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Thread $thread)
+    public function update(Request $request, Comment $comment)
     {
         //
     }
@@ -100,10 +86,10 @@ class ThreadController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Thread  $thread
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy(Comment $comment)
     {
         //
     }

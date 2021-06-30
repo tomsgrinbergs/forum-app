@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Thread;
-use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ThreadFactory extends Factory
+class CommentFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Thread::class;
+    protected $model = Comment::class;
 
     /**
      * Define the model's default state.
@@ -23,9 +22,7 @@ class ThreadFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
-            'title' => $this->faker->title(),
-            'content' => $this->faker->paragraph(),
+            //
         ];
     }
 }

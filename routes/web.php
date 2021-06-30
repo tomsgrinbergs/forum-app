@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ThreadController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,7 @@ Route::get('/', [ThreadController::class, 'index'])->name('threads.index');
 Route::middleware('auth')->group(function () {
     Route::get('/threads/create', [ThreadController::class, 'create'])->name('threads.create');
     Route::post('/threads', [ThreadController::class, 'store'])->name('threads.store');
+    Route::post('/threads/{thread}/comments', [CommentController::class, 'store'])->name('comments.store');
 });
 
 Route::get('/threads/{thread}', [ThreadController::class, 'show'])->name('threads.show');
