@@ -5,13 +5,34 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    You're logged in!
+    @auth
+        <div class="my-12">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="text-right">
+                    <x-button :href="route('threads.create')">Start a New Thread</x-button>
                 </div>
             </div>
         </div>
-    </div>
+    @endauth
+
+    @if ($threads->isNotempty())
+        <div class="my-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="px-6 py-2 bg-white border-b border-gray-200">
+
+                        <ul class="divide-y">
+                            @foreach ($threads as $thread)
+                                <li class="py-4 flex justify-between">
+                                    <a href="{{ route('threads.show', $thread) }}">{{ $thread->title }}</a>
+                                    <span>{{ $thread->user->name }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </x-app-layout>
