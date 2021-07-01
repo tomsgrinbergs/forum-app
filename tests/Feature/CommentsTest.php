@@ -45,8 +45,8 @@ class CommentsTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('comments.upvote', $comment));
 
-        $response->assertRedirect(route('threads.show', $comment->thread));
-        $response->assertSessionHasNoErrors();
+        $response->assertSuccessful();
+        $response->assertJsonStructure(['upvotesCount']);
 
         $this->assertDatabaseHas('comment_upvotes', [
             'comment_id' => $comment->id,

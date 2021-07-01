@@ -36,14 +36,13 @@
                             <p class="whitespace-pre-wrap">{{ $comment->content }}</p>
                             <div>by {{ $comment->user->name }}</div>
                         </div>
-                        <div class="flex justify-between items-center text-right border-t mt-4 pt-4">
-                            <div>Upvotes: {{ $comment->upvotes_count }}</div>
-                            @if (Auth::check() && !$upvotedComments->contains($comment->id))
-                                <form method="POST" action="{{ route('comments.upvote', $comment) }}">
-                                    @csrf
-                                    <x-button>Upvote</x-button>
-                                </form>
-                            @endif
+                        <div class="border-t mt-4 pt-4">
+                            <div data-vue-app="Upvote" data-props="{{ collect([
+                                'upvoteUrl' => route('comments.upvote', $comment),
+                                'isAuthenticated' => Auth::check(),
+                                'initUpvotesCount' => $comment->upvotes_count,
+                                'initAlreadyUpvoted' => $upvotedComments->contains($comment->id),
+                            ]) }}"></div>
                         </div>
                     </div>
                 </div>

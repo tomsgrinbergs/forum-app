@@ -111,6 +111,8 @@ class CommentController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('threads.show', $comment->thread);
+        return [
+            'upvotesCount' => $comment->upvotes()->count(),
+        ];
     }
 }
