@@ -21,9 +21,24 @@
                     <form method="POST" action="{{ route('threads.store') }}">
                         @csrf
 
+                        @if ($categories->isNotEmpty())
+                            <div class="mb-4">
+                                <x-label for="category" :value="__('Category')" />
+                                <select id="category" name="category" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                    <option value="">(none)</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->title }}</option>
+                                    @endforeach
+                                </select>
+                                @error('category')
+                                    <div class="text-red-600 mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endif
+
                         <div class="mb-4">
                             <x-label for="title" :value="__('Title')" />
-                            <x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus />
+                            <x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required />
                             @error('title')
                                 <div class="text-red-600 mt-1">{{ $message }}</div>
                             @enderror

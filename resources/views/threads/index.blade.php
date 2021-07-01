@@ -24,7 +24,14 @@
                         <ul class="divide-y">
                             @foreach ($threads as $thread)
                                 <li class="py-4 flex justify-between">
-                                    <a href="{{ route('threads.show', $thread) }}">{{ $thread->title }}</a>
+                                    <a href="{{ route('threads.show', $thread) }}">
+                                        @if ($thread->category)
+                                            <span class="bg-yellow-700 inline-block leading-none px-2 py-1 rounded-full text-white mr-4">
+                                                {{ $thread->category->title }}
+                                            </span>
+                                        @endif
+                                        {{ $thread->title }}
+                                    </a>
                                     <span>{{ $thread->user->name }}</span>
                                 </li>
                             @endforeach

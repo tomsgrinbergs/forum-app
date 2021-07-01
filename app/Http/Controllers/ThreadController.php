@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\CommentUpvote;
 use App\Models\Thread;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class ThreadController extends Controller
     public function index()
     {
         $threads = Thread::query()
-            ->with('user')
+            ->with('user', 'category')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -33,7 +34,11 @@ class ThreadController extends Controller
      */
     public function create()
     {
-        return view('threads.create');
+        $categories = Category::all();
+
+        return view('threads.create', [
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -45,11 +50,13 @@ class ThreadController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'category' => ['nullable', 'exists:categories,id'],
             'title' => ['required', 'max:255'],
             'content' => ['required'],
         ]);
 
         Auth::user()->threads()->create([
+            'category_id' => $request->input('category'),
             'title' => $request->input('title'),
             'content' => $request->input('content'),
         ]);
