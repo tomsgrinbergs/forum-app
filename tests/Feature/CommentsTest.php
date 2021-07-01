@@ -59,4 +59,20 @@ class CommentsTest extends TestCase
         $response = $this->post(route('comments.upvote', 1));
         $response->assertRedirect('login');
     }
+
+    public function test_a_user_cannot_upvote_the_same_comment_again()
+    {
+        $user = User::factory()->create();
+        $comment = Comment::factory()->create();
+
+        // 1st Upvote
+        $response = $this->actingAs($user)->post(route('comments.upvote', $comment));
+        $response->assertSessionHasNoErrors();
+
+        // 2nd Upvote
+        $response = $this->actingAs($user)->post(route('comments.upvote', $comment));
+        $response->assertSessionHasErrors();
+
+        $this->assertDatabaseCount('comment_upvotes', 1);
+    }
 }

@@ -38,12 +38,12 @@
                         </div>
                         <div class="flex justify-between items-center text-right border-t mt-4 pt-4">
                             <div>Upvotes: {{ $comment->upvotes_count }}</div>
-                            @auth
+                            @if (Auth::check() && !$upvotedComments->contains($comment->id))
                                 <form method="POST" action="{{ route('comments.upvote', $comment) }}">
                                     @csrf
                                     <x-button>Upvote</x-button>
                                 </form>
-                            @endauth
+                            @endif
                         </div>
                     </div>
                 </div>

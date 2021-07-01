@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class CommentController extends Controller
 {
@@ -96,6 +97,16 @@ class CommentController extends Controller
 
     public function upvote(Comment $comment)
     {
+        $upvote = $comment->upvotes()->where([
+            'user_id' => Auth::id(),
+        ])->first();
+
+        if ($upvote) {
+            throw ValidationException::withMessages([
+                'status' => 'You cannot upvote this comment again.',
+            ]);
+        }
+
         $comment->upvotes()->create([
             'user_id' => Auth::id(),
         ]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommentUpvote;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,8 +73,14 @@ class ThreadController extends Controller
             'comments.user',
         ]);
 
+        $upvotedComments = CommentUpvote::query()
+            ->where('user_id', Auth::id())
+            ->whereIn('comment_id', $thread->comments->pluck('id'))
+            ->pluck('comment_id');
+
         return view('threads.show', [
             'thread' => $thread,
+            'upvotedComments' => $upvotedComments,
         ]);
     }
 
