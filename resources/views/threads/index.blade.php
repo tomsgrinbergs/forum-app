@@ -5,15 +5,27 @@
         </h2>
     </x-slot>
 
-    @auth
-        <div class="my-12">
-            <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <div class="text-right">
+    <div class="my-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <form class="flex items-center" method="GET" action="{{ route('threads.index') }}">
+                    <select id="category" name="category" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option value="">All Categories</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" {{ $filterCategory == $category->id ? 'selected' : '' }}>
+                                {{ $category->title }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <x-button class="ml-4">Filter</x-button>
+                </form>
+                @auth
                     <x-button :href="route('threads.create')">Start a New Thread</x-button>
-                </div>
+                @endauth
             </div>
         </div>
-    @endauth
+    </div>
 
     @if ($threads->isNotempty())
         <div class="my-12">

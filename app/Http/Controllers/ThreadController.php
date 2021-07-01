@@ -13,16 +13,30 @@ class ThreadController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $request->validate([
+            'category' => ['nullable', 'exists:categories,id'],
+        ]);
+
+        $filterCategory = $request->input('category');
+
+        $categories = Category::all();
+
         $threads = Thread::query()
             ->with('user', 'category')
+            ->when($filterCategory, function ($query, $category) {
+                $query->where('category_id', $category);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
         return view('threads.index', [
+            'filterCategory' => $filterCategory,
+            'categories' => $categories,
             'threads' => $threads,
         ]);
     }
